@@ -18,19 +18,19 @@ Ensure you have the Rust toolchain (2021 edition or later) and Cargo installed.
 cargo build --release
 ```
 
-The binary will be available at `./target/release/inkless`.
+The binary will be available at `./target/release/inkl`.
 
 ## Usage
 
 ```bash
 # View a specific file
-inkless filename.txt
+inkl filename.txt
 
 # View output from a pipe
-ls -R | inkless
+ls -R | inkl
 
 # Check version
-inkless --v
+inkl --v
 ```
 
 ## Command Reference

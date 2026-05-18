@@ -50,8 +50,8 @@ cargo build --release
 
 ### Usage
 ```bash
-./target/release/inkless <filename>
-./target/release/inkless --v
+./target/release/inkl <filename>
+./target/release/inkl --v
 ```
 
 ## 5. Development Workflow
