@@ -195,6 +195,8 @@ void view_render_screen(AppState *app) {
 
     if (app->search_failed) {
         rb_append(&rb, "\x1b[7mPattern not found (press any key)\x1b[m", 38);
+    } else if (app->search_wrapped) {
+        rb_append(&rb, "\x1b[7mSearch wrapped (press any key)\x1b[m", 35);
     } else {
         int current_last_line = app->scroll_y + view_height;
         if (current_last_line >= (int)app->layout.count) {

@@ -40,9 +40,10 @@ Inkless follows a flat, modular architecture designed for maximum clarity and mi
 - **Interactive Help**: Access a structured, monochrome command reference by pressing `h`. Returns to document via `Esc`.
 - **Regex Search Engine**:
     - Forward (`/`) and Backward (`?`) search using POSIX Extended Regular Expressions.
-    - Repeating searches (`n`, `N`) with direction persistence.
+    - Repeating searches (`n`, `N`) with direction persistence and fixed iteration logic.
     - **Visual Highlighting**: Real-time ANSI-inverted highlighting of all matches.
-    - **Wraparound Search**: Automatic document loop-back when no further matches exist.
+    - **Wraparound Search**: Automatic document loop-back with "Search wrapped" status notification.
+    - **Case Sensitivity**: Toggle case-insensitive matching via the colon prompt (`:i`).
     - **Clear Search**: Press `Esc` to instantly remove all active highlighting.
 - **GNU Less Aesthetic**: Minimalist colon prompt with inverted `(END)` indicator at file completion.
 

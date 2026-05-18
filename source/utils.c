@@ -22,6 +22,7 @@ static const char *help_lines[] = {
     "    ?                Search backward (Regex)",
     "    n                Repeat search forward",
     "    N                Repeat search backward",
+    "    :i               Toggle case-insensitive search",
     "    Esc              Clear active search highlights",
     "",
     "  System",
@@ -74,9 +75,13 @@ void ink_die(const char *fmt, ...) {
 void utils_do_search(AppState *app, const char *pattern, int dir) {
     if (!pattern || !pattern[0] || app->doc.line_count == 0) return;
     app->search_failed = false;
+    app->search_wrapped = false;
+
+    int flags = REG_EXTENDED;
+    if (app->search_case_insensitive) flags |= REG_ICASE;
 
     regex_t regex;
-    if (regcomp(&regex, pattern, REG_EXTENDED) != 0) {
+    if (regcomp(&regex, pattern, flags) != 0) {
         app->search_failed = true;
         return;
     }
@@ -88,9 +93,14 @@ void utils_do_search(AppState *app, const char *pattern, int dir) {
     }
 
     int found = -1;
+    bool wrapped = false;
     int n = (int)app->doc.line_count;
     for (int i = 1; i <= n; i++) {
         int idx = (current_raw + (i * dir) + n) % n;
+        
+        if (dir > 0 && idx < current_raw) wrapped = true;
+        if (dir < 0 && idx > current_raw) wrapped = true;
+
         if (regexec(&regex, app->doc.raw_lines[idx], 0, NULL, 0) == 0) {
             found = idx;
             break;
@@ -99,9 +109,9 @@ void utils_do_search(AppState *app, const char *pattern, int dir) {
 
     if (found != -1) {
         app->scroll_y = (int)app->layout.raw_to_display[found];
+        app->search_wrapped = wrapped;
         strncpy(app->last_pattern, pattern, sizeof(app->last_pattern) - 1);
         app->last_pattern[sizeof(app->last_pattern) - 1] = '\0';
-        app->last_search_dir = dir;
     } else {
         app->search_failed = true;
     }

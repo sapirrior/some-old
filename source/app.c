@@ -30,6 +30,8 @@ void app_init(AppState *app, int num_files, const char **filenames) {
     app->last_pattern[0] = '\0';
     app->last_search_dir = 1;
     app->search_failed = false;
+    app->search_wrapped = false;
+    app->search_case_insensitive = true; // Default to case-insensitive
     app->show_help = false;
     app->show_line_numbers = false;
     app->running = true;

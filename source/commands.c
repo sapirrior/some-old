@@ -4,6 +4,7 @@
 
 void command_dispatch(AppState *app, int key) {
     if (app->search_failed) app->search_failed = false;
+    if (app->search_wrapped) app->search_wrapped = false;
 
     if (app->show_help) {
         if (key == KEY_HELP || key == KEY_ESC) app->show_help = false;
@@ -94,6 +95,7 @@ void cmd_sys_colon(AppState *app) {
     else if (strcmp(buf, "p") == 0 && app->current_file_index > 0)
         app_switch_file(app, app->current_file_index - 1);
     else if (strcmp(buf, "q") == 0) cmd_sys_quit(app);
+    else if (strcmp(buf, "i") == 0) app->search_case_insensitive = !app->search_case_insensitive;
     else if (strcmp(buf, "N") == 0) {
         app->show_line_numbers = !app->show_line_numbers;
     } else {
