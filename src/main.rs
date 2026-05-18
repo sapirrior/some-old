@@ -14,6 +14,11 @@ use std::io::{self, IsTerminal};
 fn main() {
     let args: Vec<String> = env::args().skip(1).collect();
     
+    if args.len() == 1 && args[0] == "--v" {
+        println!("inkless version {}", env!("CARGO_PKG_VERSION"));
+        return;
+    }
+
     if args.is_empty() && io::stdin().is_terminal() {
         eprintln!("Usage: inkl <filename> [filename...]");
         eprintln!("   or: <command> | inkl");
