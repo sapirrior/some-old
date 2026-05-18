@@ -29,6 +29,7 @@ void command_dispatch(AppState *app, int key) {
         case KEY_SEARCH_BACKWARD: cmd_search_backward(app); break;
         case KEY_SEARCH_NEXT:     cmd_search_next(app); break;
         case KEY_SEARCH_PREV:     cmd_search_prev(app); break;
+        case ':':                 cmd_sys_colon(app); break;
         case KEY_HELP:            cmd_sys_help(app); break;
         case KEY_ESC:             app->last_pattern[0] = '\0'; break;
         case KEY_QUIT:            cmd_sys_quit(app); break;
@@ -130,4 +131,29 @@ void cmd_sys_help(AppState *app) {
 
 void cmd_sys_quit(AppState *app) {
     app->running = false;
+}
+
+void cmd_sys_colon(AppState *app) {
+    // Briefly show the colon prompt at the bottom
+    RenderBuf rb;
+    rb_init(&rb);
+    rb_printf(&rb, "\x1b[%d;1H\x1b[2K:", app->ts.rows);
+    rb_flush(&rb);
+    rb_free(&rb);
+
+    terminal_show_cursor();
+    int key = input_read_key();
+    terminal_hide_cursor();
+
+    if (key == 'n') {
+        if (app->current_file_index < app->num_files - 1) {
+            app_switch_file(app, app->current_file_index + 1);
+        }
+    } else if (key == 'p') {
+        if (app->current_file_index > 0) {
+            app_switch_file(app, app->current_file_index - 1);
+        }
+    } else if (key == 'q') {
+        cmd_sys_quit(app);
+    }
 }

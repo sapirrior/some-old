@@ -63,7 +63,9 @@ typedef struct AppState {
     Document doc;
     Layout layout;
     int scroll_y;
-    const char *filename;
+    const char **filenames;
+    int num_files;
+    int current_file_index;
     volatile sig_atomic_t resize_pending;
     char last_pattern[256];
     int last_search_dir;
@@ -81,9 +83,10 @@ typedef struct {
 /* --- MODULES --- */
 
 /* app.c */
-void app_init(AppState *app, const char *filename);
+void app_init(AppState *app, int num_files, const char **filenames);
 void app_run(AppState *app);
 void app_cleanup(AppState *app);
+void app_switch_file(AppState *app, int index);
 extern AppState *g_app;
 
 /* terminal.c */
@@ -134,6 +137,7 @@ void cmd_search_next(AppState *app);
 void cmd_search_prev(AppState *app);
 void cmd_sys_quit(AppState *app);
 void cmd_sys_help(AppState *app);
+void cmd_sys_colon(AppState *app);
 
 /* utils.c */
 void ink_die(const char *fmt, ...);

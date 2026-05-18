@@ -73,6 +73,7 @@ void rb_free(RenderBuf *rb) {
 void view_read_prompt(AppState *app, char prompt_char, char *buf, size_t size) {
     size_t len = 0;
     buf[0] = '\0';
+    terminal_show_cursor();
 
     while (1) {
         RenderBuf rb;
@@ -91,6 +92,7 @@ void view_read_prompt(AppState *app, char prompt_char, char *buf, size_t size) {
             buf[len] = '\0';
         }
     }
+    terminal_hide_cursor();
 }
 
 /* --- Screen Rendering --- */

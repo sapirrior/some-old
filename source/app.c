@@ -17,22 +17,42 @@ static void handle_sigwinch(int sig) {
     }
 }
 
-void app_init(AppState *app, const char *filename) {
-    app->filename = filename;
-    doc_init(&app->doc);
-    doc_load_file(&app->doc, filename);
+void app_init(AppState *app, int num_files, const char **filenames) {
+    app->filenames = filenames;
+    app->num_files = num_files;
+    app->current_file_index = 0;
     
+    doc_init(&app->doc);
+    layout_init(&app->layout);
+
     app->scroll_y = 0;
     app->resize_pending = 0;
     app->last_pattern[0] = '\0';
     app->last_search_dir = 1;
+    app->search_failed = false;
+    app->show_help = false;
     app->running = true;
 
     terminal_setup(&app->ts);
-    layout_init(&app->layout);
-    layout_compute(&app->layout, &app->doc, app->ts.cols);
+    app_switch_file(app, 0);
     
     g_app = app;
+}
+
+void app_switch_file(AppState *app, int index) {
+    if (index < 0 || index >= app->num_files) return;
+
+    doc_free(&app->doc);
+    layout_free(&app->layout);
+    
+    doc_init(&app->doc);
+    layout_init(&app->layout);
+    
+    doc_load_file(&app->doc, app->filenames[index]);
+    layout_compute(&app->layout, &app->doc, app->ts.cols);
+    
+    app->current_file_index = index;
+    app->scroll_y = 0;
 }
 
 void app_run(AppState *app) {

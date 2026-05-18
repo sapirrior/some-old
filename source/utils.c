@@ -12,6 +12,8 @@ static const char *help_lines[] = {
     "    u                Half-page up",
     "    g, <, Home       Jump to beginning",
     "    G, >, End        Jump to end",
+    "    :n               Next file",
+    "    :p               Previous file",
     "",
     "  Search",
     "    /                Search forward (Regex)",

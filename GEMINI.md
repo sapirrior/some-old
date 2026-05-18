@@ -33,6 +33,7 @@ Ink follows a flat, modular architecture designed for maximum clarity and minima
     - Half-page (`d`, `u`)
     - Full-page (`f`, `Space`, `b`)
     - Document jumps (`g`, `G`, `<`, `>`)
+    - **Multi-File Navigation**: Transition between multiple files via `:n` (next) and `:p` (previous).
 - **Interactive Help**: Access a structured, monochrome command reference by pressing `h`. Returns to document via `Esc`.
 - **Regex Search Engine**:
     - Forward (`/`) and Backward (`?`) search using POSIX Extended Regular Expressions.
