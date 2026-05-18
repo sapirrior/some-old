@@ -43,7 +43,14 @@ typedef struct {
     int rows;
     int cols;
     struct termios orig_termios;
+    bool is_active;
 } TerminalState;
+
+/* --- MEMORY WRAPPERS --- */
+
+void *xmalloc(size_t size);
+void *xrealloc(void *ptr, size_t size);
+char *xstrdup(const char *s);
 
 typedef struct {
     char **raw_lines;

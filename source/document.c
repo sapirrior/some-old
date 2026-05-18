@@ -17,13 +17,7 @@ void doc_load_file(Document *doc, const char *filename) {
     while ((read = getline(&line, &len, f)) != -1) {
         if (doc->line_count >= doc->line_cap) {
             size_t new_cap = doc->line_cap == 0 ? 128 : doc->line_cap * 2;
-            char **new_lines = realloc(doc->raw_lines, sizeof(char *) * new_cap);
-            if (!new_lines) {
-                free(line);
-                fclose(f);
-                ink_die("Memory allocation failed for document lines");
-            }
-            doc->raw_lines = new_lines;
+            doc->raw_lines = xrealloc(doc->raw_lines, sizeof(char *) * new_cap);
             doc->line_cap = new_cap;
         }
         
@@ -37,13 +31,7 @@ void doc_load_file(Document *doc, const char *filename) {
             line[read - 1] = '\0';
         }
         
-        char *dup = strdup(line);
-        if (!dup) {
-            free(line);
-            fclose(f);
-            ink_die("Memory allocation failed during line duplication");
-        }
-        doc->raw_lines[doc->line_count++] = dup;
+        doc->raw_lines[doc->line_count++] = xstrdup(line);
     }
     free(line);
     fclose(f);

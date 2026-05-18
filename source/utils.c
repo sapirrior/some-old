@@ -36,7 +36,33 @@ const char **utils_get_help_lines(int *count) {
     return help_lines;
 }
 
+/* --- MEMORY WRAPPERS --- */
+
+void *xmalloc(size_t size) {
+    void *ptr = malloc(size);
+    if (!ptr) ink_die("Out of memory (malloc failed)");
+    return ptr;
+}
+
+void *xrealloc(void *ptr, size_t size) {
+    void *new_ptr = realloc(ptr, size);
+    if (!new_ptr && size > 0) ink_die("Out of memory (realloc failed)");
+    return new_ptr;
+}
+
+char *xstrdup(const char *s) {
+    char *dup = strdup(s);
+    if (!dup) ink_die("Out of memory (strdup failed)");
+    return dup;
+}
+
+/* --- ERROR HANDLING --- */
+
 void ink_die(const char *fmt, ...) {
+    if (g_app) {
+        terminal_restore(&g_app->ts);
+    }
+    
     va_list ap;
     va_start(ap, fmt);
     vfprintf(stderr, fmt, ap);

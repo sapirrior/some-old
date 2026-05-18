@@ -34,10 +34,9 @@ void app_init(AppState *app, int num_files, const char **filenames) {
     app->show_line_numbers = false;
     app->running = true;
 
+    g_app = app;
     terminal_setup(&app->ts);
     app_switch_file(app, 0);
-    
-    g_app = app;
 }
 
 void app_switch_file(AppState *app, int index) {

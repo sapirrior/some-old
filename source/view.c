@@ -6,11 +6,7 @@
 
 void rb_init(RenderBuf *rb) {
     rb->cap = 16384;
-    rb->data = malloc(rb->cap);
-    if (!rb->data) {
-        perror("malloc");
-        exit(1);
-    }
+    rb->data = xmalloc(rb->cap);
     rb->len = 0;
     rb->data[0] = '\0';
 }
@@ -19,9 +15,7 @@ void rb_append(RenderBuf *rb, const char *s, size_t len) {
     if (!rb->data) return;
     if (rb->len + len >= rb->cap) {
         size_t new_cap = (rb->cap + len) * 2;
-        char *new_data = realloc(rb->data, new_cap);
-        if (!new_data) return;
-        rb->data = new_data;
+        rb->data = xrealloc(rb->data, new_cap);
         rb->cap = new_cap;
     }
     memcpy(rb->data + rb->len, s, len);
@@ -44,12 +38,10 @@ void rb_printf(RenderBuf *rb, const char *fmt, ...) {
     }
 
     size_t size = (size_t)n;
-    char *buf = malloc(size + 1);
-    if (buf) {
-        vsnprintf(buf, size + 1, fmt, ap);
-        rb_append(rb, buf, size);
-        free(buf);
-    }
+    char *buf = xmalloc(size + 1);
+    vsnprintf(buf, size + 1, fmt, ap);
+    rb_append(rb, buf, size);
+    free(buf);
     va_end(ap);
 }
 

@@ -3,9 +3,9 @@
 #include <sys/ioctl.h>
 
 void terminal_setup(TerminalState *ts) {
+    ts->is_active = false;
     if (tcgetattr(STDIN_FILENO, &ts->orig_termios) == -1) {
-        perror("tcgetattr");
-        exit(1);
+        ink_die("Terminal setup failed: tcgetattr");
     }
 
     struct termios raw = ts->orig_termios;
@@ -17,19 +17,21 @@ void terminal_setup(TerminalState *ts) {
     raw.c_cc[VTIME] = 1;
 
     if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw) == -1) {
-        perror("tcsetattr");
-        exit(1);
+        ink_die("Terminal setup failed: tcsetattr");
     }
 
+    ts->is_active = true;
     terminal_enter_alt_buffer();
     terminal_hide_cursor();
     terminal_get_size(ts);
 }
 
 void terminal_restore(TerminalState *ts) {
+    if (!ts->is_active) return;
     terminal_exit_alt_buffer();
     terminal_show_cursor();
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &ts->orig_termios);
+    ts->is_active = false;
 }
 
 void terminal_get_size(TerminalState *ts) {

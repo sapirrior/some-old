@@ -11,16 +11,11 @@ void layout_init(Layout *layout) {
 static void layout_add_line(Layout *layout, const char *line, size_t raw_line) {
     if (layout->count >= layout->cap) {
         size_t new_cap = layout->cap == 0 ? 128 : layout->cap * 2;
-        char **new_lines = realloc(layout->display_lines, sizeof(char *) * new_cap);
-        size_t *new_d2r = realloc(layout->display_to_raw, sizeof(size_t) * new_cap);
-        if (!new_lines || !new_d2r) ink_die("Memory allocation failed for layout expansion");
-        layout->display_lines = new_lines;
-        layout->display_to_raw = new_d2r;
+        layout->display_lines = xrealloc(layout->display_lines, sizeof(char *) * new_cap);
+        layout->display_to_raw = xrealloc(layout->display_to_raw, sizeof(size_t) * new_cap);
         layout->cap = new_cap;
     }
-    char *dup = strdup(line);
-    if (!dup) ink_die("Memory allocation failed for line duplication in layout");
-    layout->display_lines[layout->count] = dup;
+    layout->display_lines[layout->count] = xstrdup(line);
     layout->display_to_raw[layout->count] = raw_line;
     layout->count++;
 }
@@ -31,8 +26,7 @@ void layout_compute(Layout *layout, Document *doc, int cols) {
 
     if (doc->line_count == 0) return;
     
-    layout->raw_to_display = malloc(sizeof(size_t) * doc->line_count);
-    if (!layout->raw_to_display) ink_die("Memory allocation failed for layout mapping");
+    layout->raw_to_display = xmalloc(sizeof(size_t) * doc->line_count);
 
     int margin = (cols * 8) / 100;
     int content_width = cols - (2 * margin);
@@ -66,8 +60,7 @@ void layout_compute(Layout *layout, Document *doc, int cols) {
             }
 
             if (split == start) {
-                char *buf = malloc(content_width + 1);
-                if (!buf) ink_die("Memory allocation failed for wrap buffer");
+                char *buf = xmalloc(content_width + 1);
                 memcpy(buf, raw + start, content_width);
                 buf[content_width] = '\0';
                 layout_add_line(layout, buf, current_raw);
@@ -77,8 +70,7 @@ void layout_compute(Layout *layout, Document *doc, int cols) {
                 size_t split_len = split - start;
                 if (raw[split] == '-') split_len++;
                 
-                char *buf = malloc(split_len + 1);
-                if (!buf) ink_die("Memory allocation failed for wrap buffer");
+                char *buf = xmalloc(split_len + 1);
                 memcpy(buf, raw + start, split_len);
                 buf[split_len] = '\0';
                 layout_add_line(layout, buf, current_raw);
