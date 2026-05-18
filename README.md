@@ -1,62 +1,69 @@
-# Inkless
+# Inkless (Rust Edition)
 
-Inkless is a terminal-based text pager written in C11 for POSIX systems. It focuses on minimalist design, zero external dependencies, and stable layout management.
+**Inkless** is a minimalist, high-integrity terminal pager rewritten in Rust. It serves as a modern successor to GNU `less`, prioritizing readability, modularity, and memory safety.
 
-## Technical Specifications
+![Version](https://img.shields.io/badge/version-0.2.0-blue)
+![Rust](https://img.shields.io/badge/rust-2021-orange)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-- **Language**: C11 (`-std=c11`)
-- **Portability**: POSIX-compliant (`_POSIX_C_SOURCE=200809L`)
-- **Dependencies**: Standard C Library only
-- **Build System**: Makefile
+## Features
 
-## Core Features
+- **Granular Modularity**: Architected with a strict "Connector" pattern for high maintainability.
+- **Smart Word-Wrapping**: Maintains legibility by splitting text at logical boundaries.
+- **Dynamic Margins**: Automatic side padding for a cleaner reading experience.
+- **Regex Search**: Powerful forward/backward searching with real-time visual highlighting.
+- **Responsive Design**: Full terminal resize support with instant layout recomputation.
+- **Memory Safety**: Zero manual memory management; protected by Rust's ownership model.
+- **Zero-Cost Abstractions**: High performance with minimal overhead.
 
-- **Word-Wrapping**: Splits lines at whitespace or hyphens.
-- **Fixed Margins**: Applies a constant 8% side-margin to the viewport.
-- **Pipe Support**: Read input directly from stdin (e.g., `ls | inkl`).
-- **Regex Search**: Forward and backward search using POSIX Extended Regular Expressions.
-- **Line Numbering**: Optional line number display (`:N`) within the margin.
-- **Navigation**: Supports line-by-line, page-by-page, and direct line jumping (`:<number>`).
-- **Multi-File**: Support for viewing multiple files via `:n` and `:p`.
+## Architecture
 
-## Build Instructions
+Inkless uses a modern directory-based module system:
+- **`src/app/`**: Application state and main event loop.
+- **`src/terminal/`**: RAII-based raw mode management.
+- **`src/document/`**: Safe file I/O and buffering.
+- **`src/layout/`**: Coordinate mapping and wrapping algorithms.
+- **`src/commands/`**: Modular command dispatchers (Nav, Search, Sys).
 
-To compile the binary:
+## Installation
 
+### Prerequisites
+- [Rust](https://www.rust-lang.org/tools/install) (Cargo)
+
+### Build
 ```bash
-make
+git clone https://github.com/sapirrior/inkless.git
+cd inkless
+cargo build --release
 ```
-
-The executable will be located at `build/inkl`.
 
 ## Usage
 
 ```bash
-# View one or more files
-./build/inkl <filename> [filename2 ...]
+# Paging a file
+./target/release/inkless my_file.txt
 
-# Use as a pager for other commands
-ls -la | ./build/inkl
+# Paging from a pipe
+ls -R | ./target/release/inkless
 ```
 
-## Commands
+## Keybindings
 
 | Key | Action |
 |-----|--------|
-| `j` / `k` | Scroll down / up (one line) |
-| `d` / `u` | Scroll down / up (half page) |
+| `j` / `Down` | Scroll down one line |
+| `k` / `Up` | Scroll up one line |
 | `f` / `Space` | Page down |
 | `b` | Page up |
-| `g` / `G` | Jump to start / end of file |
-| `/pattern` | Search forward |
-| `?pattern` | Search backward |
-| `n` / `N` | Next / previous search match |
+| `g` / `<` | Jump to top |
+| `G` / `>` | Jump to end |
+| `/` | Search forward |
+| `?` | Search backward |
+| `n` / `N` | Repeat search / Reverse repeat |
 | `:N` | Toggle line numbers |
-| `:<num>` | Jump to line `<num>` |
-| `:n` / `:p` | Next / previous file |
-| `h` | Show help menu |
-| `q` | Quit |
+| `:q` / `q` | Quit |
+| `h` | Help |
 
 ## License
 
-MIT License - Copyright (c) 2026 Nolan Stark
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

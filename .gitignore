@@ -2,3 +2,9 @@ build/
 
 .gemini/
 gha-creds-*.json
+.old/
+
+
+# Added by cargo
+
+/target
