@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build-and-release:
+    name: Build and Release
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: linux-x86_64
+          - os: macos-latest
+            target: macos-x86_64
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Inkless
+        run: make
+
+      - name: Package Artifacts
+        shell: bash
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          ARCHIVE_NAME="inkless-${VERSION}-${{ matrix.target }}.tar.gz"
+          
+          # Create a temporary directory for clean packaging
+          mkdir dist
+          cp build/inkl dist/
+          cp README.md LICENSE dist/
+          
+          # Create the tarball from the dist directory
+          tar -czvf "$ARCHIVE_NAME" -C dist .
+          
+          echo "ARCHIVE_NAME=$ARCHIVE_NAME" >> $GITHUB_ENV
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.ARCHIVE_NAME }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
