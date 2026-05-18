@@ -25,6 +25,7 @@ Every module follows the **Connector (Facade)** pattern. `mod.rs` files contain 
 - `src/terminal/`: Terminal state and RAII cleanup (`guard.rs`, `utils.rs`).
 - `src/input/`: Keystroke parsing using `crossterm` (`keys.rs`, `reader.rs`).
 - `src/view/`: Screen rendering and prompt handling (`render.rs`, `prompt.rs`).
+- `src/errors/`: Modularized error types following the connector pattern (`types.rs`).
 - `src/commands/`: Domain-specific command handlers.
     - `dispatch.rs`: Central command router.
     - `cmd_nav.rs`: Navigation logic.
@@ -60,5 +61,5 @@ cargo build --release
 
 ## 6. Coding Conventions
 - **RAII Patterns**: Mandatory use of `Drop` for terminal state management.
-- **Fail-Fast**: Fatal errors trigger panics; `TerminalGuard` ensures safe restoration.
+- **Structured Error Handling**: Prefer `Result` propagation over panics. Captured errors are displayed in the UI status bar.
 - **Instruction-Free Connector Files**: `mod.rs` must not contain implementation.
