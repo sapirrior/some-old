@@ -1,9 +1,9 @@
 # Project Inkless: High-Integrity Terminal Pager
 
-Inkless is a minimalist terminal pager written in Rust (2021 Edition). It prioritizes safety, modularity, and readability through specialized layout algorithms and a strict command philosophy.
+Inkless is a minimalist terminal pager written in Rust (2024 Edition). It prioritizes safety, modularity, and readability through specialized layout algorithms and a strict command philosophy.
 
 ## 1. Technical Specifications
-- **Language**: Rust (2021 Edition)
+- **Language**: Rust (2024 Edition)
 - **Portability**: Multi-platform via `crossterm`
 - **Build System**: Cargo
 - **Versioning**: Synchronized with `Cargo.toml` via `env!("CARGO_PKG_VERSION")`.
@@ -39,6 +39,7 @@ Every module follows the **Connector (Facade)** pattern. `mod.rs` files contain 
 - **Dynamic Margins**: Automatic 8% side padding.
 - **Responsive Resizing**: Signal-driven, real-time re-layout on `SIGWINCH`. Uses an optimized event-draining mechanism to ensure lag-free performance during rapid window dragging.
 - **Pipe Support**: Seamlessly functions as a standard pager (e.g., `ls | inkl`). Redirects TTY control for interactive events when stdin is a pipe.
+- **Live Follow Mode**: Non-blocking background I/O for real-time file monitoring (triggered by `F`).
 - **One Action, One Command**: A consistent, non-redundant command set (e.g., `q` to quit, no redundant `:q`).
 - **Regex Search Engine**: Forward/backward searching with inverted ANSI highlighting.
 - **Dynamic Versioning**: View current version via `--v` flag or help screen.
@@ -62,4 +63,5 @@ cargo build --release
 ## 6. Coding Conventions
 - **RAII Patterns**: Mandatory use of `Drop` for terminal state management.
 - **Structured Error Handling**: Prefer `Result` propagation over panics. Captured errors are displayed in the UI status bar.
+- **Async I/O**: Use background threads for line reading to maintain UI responsiveness.
 - **Instruction-Free Connector Files**: `mod.rs` must not contain implementation.

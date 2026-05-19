@@ -9,6 +9,7 @@ Inkless is a minimalist, high-integrity terminal pager written in Rust. It focus
 - **Regex Search**: Pattern-based forward and backward searching with real-time visual highlighting.
 - **Responsive Resizing**: Signal-driven (SIGWINCH), real-time re-layout. Optimized event draining ensures lag-free performance across all hardware tiers.
 - **Pipe Support**: Seamlessly functions as a standard pager (e.g., `ls | inkl`).
+- **Live Follow Mode**: Non-blocking background I/O allows real-time viewing of growing files (similar to `tail -f`) or slow pipes without freezing the UI.
 - **Robust Error Handling**: Structured error propagation with user-friendly status bar reporting; no silent failures or unhandled panics.
 - **Strict Command Philosophy**: A consistent, non-redundant interface following a "One Action, One Command" rule.
 
@@ -47,6 +48,7 @@ inkl --v
 | `b` / `PageUp` | Scroll up one page |
 | `g` / `Home` | Jump to the beginning of the document |
 | `G` / `End` | Jump to the end of the document |
+| `F` | Toggle Live Follow mode (automatic scrolling to bottom) |
 | `/` | Search forward for a pattern |
 | `?` | Search backward for a pattern |
 | `n` | Repeat the last search in the same direction |

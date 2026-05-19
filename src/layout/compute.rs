@@ -1,5 +1,5 @@
-use crate::document::Document;
 use super::types::Layout;
+use crate::document::Document;
 
 impl Layout {
     pub fn compute(&mut self, doc: &Document, cols: u16) {
@@ -43,7 +43,9 @@ impl Layout {
                 }
 
                 let mut split = start + content_width;
-                if split > len { split = len; }
+                if split > len {
+                    split = len;
+                }
 
                 let mut found_split = false;
                 // Look for space or hyphen to split
@@ -58,7 +60,7 @@ impl Layout {
                 if found_split {
                     let mut chunk_end = split;
                     let mut next_start = split + 1;
-                    
+
                     if chars[split] == '-' {
                         chunk_end = split + 1;
                         next_start = split + 1;
@@ -73,7 +75,7 @@ impl Layout {
                     self.add_line(&chunk, current_raw);
                     start = split;
                 }
-                
+
                 first_chunk = false;
             }
         }

@@ -1,12 +1,11 @@
 use crate::app::App;
 use crossterm::{
-    cursor,
-    style::{self, Color, Print, SetForegroundColor, Attribute},
+    QueueableCommand, cursor,
+    style::{self, Attribute, Color, Print, SetForegroundColor},
     terminal::{Clear, ClearType},
-    QueueableCommand,
 };
-use std::io::{self, Write};
 use regex::Regex;
+use std::io::{self, Write};
 
 pub fn render_screen(app: &App) {
     let mut stdout = io::stdout();
@@ -52,7 +51,8 @@ pub fn render_screen(app: &App) {
                 let raw_line = app.layout.display_to_raw[line_idx];
                 if raw_line > 0 {
                     let _ = stdout.queue(SetForegroundColor(Color::AnsiValue(242)));
-                    let line_num_str = format!("{:>width$} ", raw_line, width = margin.saturating_sub(1));
+                    let line_num_str =
+                        format!("{:>width$} ", raw_line, width = margin.saturating_sub(1));
                     let _ = stdout.queue(Print(line_num_str));
                     let _ = stdout.queue(style::SetAttribute(Attribute::Reset));
                 } else {
@@ -98,12 +98,21 @@ pub fn render_screen(app: &App) {
         let _ = stdout.queue(style::SetAttribute(Attribute::Reset));
     } else {
         let current_last_line = scroll_y + view_height;
-        if current_last_line >= app.layout.count() {
+        if current_last_line >= app.layout.count() && !app.is_loading {
             let _ = stdout.queue(style::SetAttribute(Attribute::Reverse));
             let _ = stdout.queue(Print("(END)"));
             let _ = stdout.queue(style::SetAttribute(Attribute::Reset));
         } else {
             let _ = stdout.queue(Print(":"));
+        }
+
+        if app.is_loading {
+            let _ = stdout.queue(Print(" [Loading...]"));
+        }
+        if app.follow_mode {
+            let _ = stdout.queue(SetForegroundColor(Color::Yellow));
+            let _ = stdout.queue(Print(" [Follow]"));
+            let _ = stdout.queue(style::SetAttribute(Attribute::Reset));
         }
     }
 
@@ -129,6 +138,7 @@ fn render_help(app: &App, stdout: &mut io::Stdout) {
         "b, PageUp     Scroll up one page",
         "g, Home       Go to top of document",
         "G, End        Go to end of document",
+        "F             Toggle follow mode (like tail -f)",
         "/             Search forward for a pattern",
         "?             Search backward for a pattern",
         "n             Repeat last search",

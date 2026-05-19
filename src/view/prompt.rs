@@ -1,9 +1,8 @@
 use crate::app::App;
 use crossterm::{
-    cursor,
-    terminal::{Clear, ClearType},
+    QueueableCommand, cursor,
     style::Print,
-    QueueableCommand,
+    terminal::{Clear, ClearType},
 };
 use std::io::{self, Write};
 

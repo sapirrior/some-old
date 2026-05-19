@@ -1,6 +1,6 @@
 use crate::app::App;
 use crate::input::Key;
-use crossterm::{cursor, ExecutableCommand};
+use crossterm::{ExecutableCommand, cursor};
 use std::io;
 
 pub fn read_prompt(app: &App, prompt_char: char) -> String {
@@ -12,9 +12,16 @@ pub fn read_prompt(app: &App, prompt_char: char) -> String {
         crate::view::draw_prompt(app, prompt_char, &input);
         match crate::input::read_key() {
             Key::Enter => break,
-            Key::Esc => { input.clear(); break; },
-            Key::Backspace => { input.pop(); },
-            Key::Char(c) => { input.push(c); },
+            Key::Esc => {
+                input.clear();
+                break;
+            }
+            Key::Backspace => {
+                input.pop();
+            }
+            Key::Char(c) => {
+                input.push(c);
+            }
             Key::Unknown => continue,
             _ => {}
         }

@@ -1,6 +1,6 @@
+use super::cmd_utils::read_prompt;
 use crate::app::App;
 use crate::utils;
-use super::cmd_utils::read_prompt;
 
 pub fn search_forward(app: &mut App) {
     let pattern = read_prompt(app, '/');

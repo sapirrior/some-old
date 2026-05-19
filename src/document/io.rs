@@ -1,21 +1,29 @@
-use std::fs::File;
 use std::io::{self, BufRead, BufReader};
-use std::path::Path;
+use std::sync::Arc;
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::mpsc::Sender;
+use std::thread;
+
 use super::types::Document;
-use crate::errors::InklessError;
 
 impl Document {
-    pub fn load_file<P: AsRef<Path>>(&mut self, path: P) -> Result<(), InklessError> {
-        let file = File::open(&path)?;
-        self.load_stream(file)
-    }
-
-    pub fn load_stream<R: io::Read>(&mut self, reader: R) -> Result<(), InklessError> {
-        let buf_reader = BufReader::new(reader);
-        for line in buf_reader.lines() {
-            let line = line?;
-            self.raw_lines.push(line);
-        }
-        Ok(())
+    pub fn spawn_reader<R: io::Read + Send + 'static>(
+        reader: R,
+        tx: Sender<String>,
+        stop_signal: Arc<AtomicBool>,
+    ) {
+        thread::spawn(move || {
+            let buf_reader = BufReader::new(reader);
+            for line in buf_reader.lines() {
+                if stop_signal.load(Ordering::Relaxed) {
+                    break;
+                }
+                if let Ok(l) = line
+                    && tx.send(l).is_err()
+                {
+                    break;
+                }
+            }
+        });
     }
 }

@@ -1,6 +1,6 @@
 [package]
 name = "inkless"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 authors = ["Nolan Stark"]
 description = "A minimalist terminal pager featuring reactive layout management, automated word-wrapping, and regular expression search."

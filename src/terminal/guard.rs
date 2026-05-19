@@ -1,10 +1,9 @@
+use crate::errors::InklessError;
 use crossterm::{
-    cursor,
+    ExecutableCommand, cursor,
     terminal::{self, EnterAlternateScreen, LeaveAlternateScreen},
-    ExecutableCommand,
 };
 use std::io::{self, Write};
-use crate::errors::InklessError;
 
 pub struct TerminalGuard;
 
@@ -12,13 +11,15 @@ impl TerminalGuard {
     pub fn new() -> Result<Self, InklessError> {
         terminal::enable_raw_mode()
             .map_err(|e| InklessError::Terminal(format!("Failed to enable raw mode: {}", e)))?;
-        
+
         io::stdout()
             .execute(EnterAlternateScreen)
-            .map_err(|e| InklessError::Terminal(format!("Failed to enter alternate screen: {}", e)))?
+            .map_err(|e| {
+                InklessError::Terminal(format!("Failed to enter alternate screen: {}", e))
+            })?
             .execute(cursor::Hide)
             .map_err(|e| InklessError::Terminal(format!("Failed to hide cursor: {}", e)))?;
-            
+
         Ok(Self)
     }
 }

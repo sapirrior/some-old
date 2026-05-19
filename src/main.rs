@@ -1,13 +1,16 @@
 mod app;
-mod terminal;
-mod document;
-mod layout;
-mod input;
-mod view;
 mod commands;
+mod document;
+mod input;
+mod layout;
+mod terminal;
 mod utils;
+mod view;
 
 mod errors;
+
+#[cfg(test)]
+mod tests_io;
 
 use app::App;
 use std::env;
@@ -15,7 +18,7 @@ use std::io::{self, IsTerminal};
 
 fn main() {
     let args: Vec<String> = env::args().skip(1).collect();
-    
+
     if args.len() == 1 && args[0] == "--v" {
         println!("inkless version {}", env!("CARGO_PKG_VERSION"));
         return;
