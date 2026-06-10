@@ -1,6 +1,6 @@
-# Contributing to Inkless
+# Contributing to some-old
 
-Thank you for your interest in contributing to Inkless. This project maintains high engineering standards through modularity, safety, and a focused user interface.
+Thank you for your interest in contributing to some-old. This project maintains high engineering standards through modularity, safety, and a focused user interface.
 
 ## Engineering Philosophy
 

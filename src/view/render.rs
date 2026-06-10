@@ -147,7 +147,7 @@ fn render_help(app: &App, stdout: &mut io::Stdout) {
     let _ = stdout.queue(Clear(ClearType::All));
     let _ = stdout.queue(cursor::MoveTo(0, 0));
 
-    let title = format!("--- Inkless v{} Help ---", env!("CARGO_PKG_VERSION"));
+    let title = format!("--- Some-old v{} Help ---", env!("CARGO_PKG_VERSION"));
     let title_x = (app.terminal_cols as usize).saturating_sub(title.len()) / 2;
     let _ = stdout.queue(cursor::MoveTo(title_x as u16, 0));
     let _ = stdout.queue(Print(title));

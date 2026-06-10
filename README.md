@@ -1,6 +1,6 @@
-# Inkless
+# some-old
 
-Inkless is a minimalist, high-integrity terminal pager written in Rust. It focuses on modularity, readability, and memory safety, providing a modern alternative to traditional pagers like GNU `less`.
+some-old is a minimalist, high-integrity terminal pager written in Rust. It focuses on modularity, readability, and memory safety, providing a modern alternative to traditional pagers like GNU `less`.
 
 ## Key Features
 
@@ -8,7 +8,7 @@ Inkless is a minimalist, high-integrity terminal pager written in Rust. It focus
 - **Dynamic Margins**: Automatic side padding for improved readability on wide displays.
 - **Regex Search**: Pattern-based forward and backward searching with real-time visual highlighting.
 - **Responsive Resizing**: Signal-driven (SIGWINCH), real-time re-layout. Optimized event draining ensures lag-free performance across all hardware tiers.
-- **Pipe Support**: Seamlessly functions as a standard pager (e.g., `ls | inkl`).
+- **Pipe Support**: Seamlessly functions as a standard pager (e.g., `ls | some-old`).
 - **Live Follow Mode**: Non-blocking background I/O allows real-time viewing of growing files (similar to `tail -f`) or slow pipes without freezing the UI.
 - **Robust Error Handling**: Structured error propagation with user-friendly status bar reporting; no silent failures or unhandled panics.
 - **Strict Command Philosophy**: A consistent, non-redundant interface following a "One Action, One Command" rule.
@@ -21,19 +21,19 @@ Ensure you have the Rust toolchain (2021 edition or later) and Cargo installed.
 cargo build --release
 ```
 
-The binary will be available at `./target/release/inkl`.
+The binary will be available at `./target/release/some-old`.
 
 ## Usage
 
 ```bash
 # View a specific file
-inkl filename.txt
+some-old filename.txt
 
 # View output from a pipe
-ls -R | inkl
+ls -R | some-old
 
 # Check version
-inkl --v
+some-old --v
 ```
 
 ## Command Reference
@@ -58,7 +58,7 @@ inkl --v
 | `:N` | Toggle line number visibility |
 | `:<num>` | Jump to specific line number |
 | `h` | Open help screen |
-| `q` | Exit Inkless |
+| `q` | Exit some-old |
 | `Esc` | Clear search highlights or return from help |
 
 ## License

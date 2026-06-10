@@ -113,14 +113,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "inkless"
-version = "0.1.1"
-dependencies = [
- "crossterm",
- "regex",
-]
-
-[[package]]
 name = "libc"
 version = "0.2.186"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -320,6 +312,14 @@ name = "smallvec"
 version = "1.15.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "67b1b7a3b5fe4f1376887184045fcf45c69e92af734b7aaddc05fb777b6fbd03"
+
+[[package]]
+name = "some-old"
+version = "0.2.0"
+dependencies = [
+ "crossterm",
+ "regex",
+]
 
 [[package]]
 name = "syn"

@@ -17,13 +17,13 @@ fn main() {
     let args: Vec<String> = env::args().skip(1).collect();
 
     if args.len() == 1 && args[0] == "--v" {
-        println!("inkless version {}", env!("CARGO_PKG_VERSION"));
+        println!("some-old version {}", env!("CARGO_PKG_VERSION"));
         return;
     }
 
     if args.is_empty() && io::stdin().is_terminal() {
-        eprintln!("Usage: inkl <filename> [filename...]");
-        eprintln!("   or: <command> | inkl");
+        eprintln!("Usage: some-old <filename> [filename...]");
+        eprintln!("   or: <command> | some-old");
         std::process::exit(1);
     }
 

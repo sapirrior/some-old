@@ -2,12 +2,12 @@ use std::fmt;
 use std::io;
 
 #[derive(Debug)]
-pub enum InklessError {
+pub enum SomeError {
     Io(io::Error),
     Terminal(String),
 }
 
-impl fmt::Display for InklessError {
+impl fmt::Display for SomeError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::Io(err) => write!(f, "I/O Error: {}", err),
@@ -16,9 +16,9 @@ impl fmt::Display for InklessError {
     }
 }
 
-impl std::error::Error for InklessError {}
+impl std::error::Error for SomeError {}
 
-impl From<io::Error> for InklessError {
+impl From<io::Error> for SomeError {
     fn from(err: io::Error) -> Self {
         Self::Io(err)
     }
